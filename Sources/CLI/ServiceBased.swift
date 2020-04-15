@@ -1,40 +1,40 @@
 import ArgumentParser
 @testable import PasswordGenerator
 
-class ServiceBased: ParsableCommand {
-
-    @Option(name: .long, default: 1000, help: "The number of iterations to be used to generate a PBKDF2 key")
-    var keyIterations: Int
-
-    @Option(name: .long, default: 64, help: "The size in bytes of the PBKDF2 key")
-    var keyLength: Int
-
-    @Option(name: .shortAndLong, help: "The master password to be used")
-    var masterPassword: String
+struct ServiceBased: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "The service to which this password generator is used for, e.g. a bank account")
     var service: String
 
-    required init() { }
+    @OptionGroup()
+    var options: PasswordGeneratorCLI.Options
 
     func run() throws {
 
         print(
             """
-            key-length: \(keyLength)
-            key-iterations: \(keyIterations)
+            key-length: \(options.keyLength)
+            key-iterations: \(options.keyIterations)
             service: \(service)
+            length: \(options.length)
+            allowedCharacters: \(options.allowedCharacters)
             """
         )
 
         print("\nGenerating password...\n")
 
         let passwordGenerator = GenericPasswordGenerator(
-            masterPasswordProvider: masterPassword,
-            entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: keyIterations, bytes: keyLength)
+            masterPasswordProvider: options.masterPassword,
+            entropyGenerator: PBKDF2BasedEntropyGenerator(
+                iterations: options.keyIterations,
+                bytes: options.keyLength
+            )
         )
 
-        let generatedPassword = try passwordGenerator.generatePassword(service: service, rules: PasswordRule.defaultRules)
+        let generatedPassword = try passwordGenerator.generatePassword(
+            service: service,
+            rules: Set(options.allowedCharacters.map { $0.asPasswordRule() }).union([.length(options.length)])
+        )
 
         print("Generated password is:")
         print(generatedPassword)

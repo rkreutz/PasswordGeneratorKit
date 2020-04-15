@@ -2,16 +2,7 @@ import ArgumentParser
 import Foundation
 @testable import PasswordGenerator
 
-class DomainBased: ParsableCommand {
-
-    @Option(name: .long, default: 1000, help: "The number of iterations to be used to generate a PBKDF2 key")
-    var keyIterations: Int
-
-    @Option(name: .long, default: 64, help: "The size in bytes of the PBKDF2 key")
-    var keyLength: Int
-
-    @Option(name: .shortAndLong, help: "The master password to be used")
-    var masterPassword: String
+struct DomainBased: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "The username to which this password generator is used for, e.g. an email")
     var username: String
@@ -22,32 +13,38 @@ class DomainBased: ParsableCommand {
     @Option(name: .shortAndLong, default: 1, help: "The seed to be used")
     var seed: Int
 
-    required init() { }
+    @OptionGroup()
+    var options: PasswordGeneratorCLI.Options
 
     func run() throws {
 
         print(
             """
-            key-length: \(keyLength)
-            key-iterations: \(keyIterations)
+            key-length: \(options.keyLength)
+            key-iterations: \(options.keyIterations)
             username: \(username)
             domain: \(domain)
             seed: \(seed)
+            length: \(options.length)
+            allowedCharacters: \(options.allowedCharacters)
             """
         )
 
         print("\nGenerating password...\n")
 
         let passwordGenerator = GenericPasswordGenerator(
-            masterPasswordProvider: masterPassword,
-            entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: keyIterations, bytes: keyLength)
+            masterPasswordProvider: options.masterPassword,
+            entropyGenerator: PBKDF2BasedEntropyGenerator(
+                iterations: options.keyIterations,
+                bytes: options.keyLength
+            )
         )
 
         let generatedPassword = try passwordGenerator.generatePassword(
             username: username,
             domain: domain,
             seed: seed,
-            rules: PasswordRule.defaultRules
+            rules: Set(options.allowedCharacters.map { $0.asPasswordRule() }).union([.length(options.length)])
         )
 
         print("Generated password is:")
