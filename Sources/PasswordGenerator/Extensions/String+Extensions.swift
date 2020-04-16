@@ -52,14 +52,14 @@ extension String {
 
             switch remainder {
 
-                case 0:
-                    self = "\(character)" + self
+            case 0:
+                self = "\(character)" + self
 
-                case (Entropy(count) - 1)...:
-                    self += "\(character)"
+            case (Entropy(count) - 1)...:
+                self += "\(character)"
 
-                case let remainder:
-                    self = String(self[..<Int(remainder)]) + "\(character)" + String(self[Int(remainder)...])
+            case let remainder:
+                self = String(self[..<Int(remainder)]) + "\(character)" + String(self[Int(remainder)...])
             }
 
             remainingEntropy = quotient

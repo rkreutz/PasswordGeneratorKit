@@ -14,10 +14,17 @@ public enum AllowedCharacters: String, CaseIterable, ExpressibleByArgument, Cust
 
         switch self {
 
-            case .lowercase: return .mustContain(characterSet: String.lowercaseCharacters, atLeast: 1)
-            case .uppercase: return .mustContain(characterSet: String.uppercaseCharacters, atLeast: 1)
-            case .symbols: return .mustContain(characterSet: String.symbolCharacters, atLeast: 1)
-            case .decimal: return .mustContain(characterSet: String.decimalCharacters, atLeast: 1)
+        case .lowercase:
+            return .mustContain(characterSet: String.lowercaseCharacters, atLeast: 1)
+
+        case .uppercase:
+            return .mustContain(characterSet: String.uppercaseCharacters, atLeast: 1)
+
+        case .symbols:
+            return .mustContain(characterSet: String.symbolCharacters, atLeast: 1)
+            
+        case .decimal:
+            return .mustContain(characterSet: String.decimalCharacters, atLeast: 1)
         }
     }
 }

@@ -4,14 +4,14 @@ extension PasswordRule: Comparable {
 
         switch (lhs, rhs) {
 
-            case (.length, _):
-                return true
+        case (.length, _):
+            return true
 
-            case (_, .length):
-                return false
+        case (_, .length):
+            return false
 
-            case let (.mustContain(lhsCharacterSet, _), .mustContain(rhsCharacterSet, _)):
-                return lhsCharacterSet < rhsCharacterSet
+        case let (.mustContain(lhsCharacterSet, _), .mustContain(rhsCharacterSet, _)):
+            return lhsCharacterSet < rhsCharacterSet
         }
     }
 }

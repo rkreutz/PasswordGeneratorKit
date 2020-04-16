@@ -4,12 +4,12 @@ extension PasswordRule: Hashable {
 
         switch self {
 
-            case .length:
-                hasher.combine(1)
+        case .length:
+            hasher.combine(1)
 
-            case let .mustContain(characterSet, _):
-                hasher.combine(2)
-                hasher.combine(characterSet)
+        case let .mustContain(characterSet, _):
+            hasher.combine(2)
+            hasher.combine(characterSet)
         }
     }
 }

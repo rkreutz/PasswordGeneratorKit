@@ -83,7 +83,7 @@ final class PasswordGeneratorTests: XCTestCase {
                     .mustContain(characterSet: String.lowercaseCharacters, atLeast: 4),
                     .mustContain(characterSet: String.uppercaseCharacters, atLeast: 3),
                     .mustContain(characterSet: String.decimalCharacters, atLeast: 2),
-                    .mustContain(characterSet: String.symbolCharacters, atLeast: 1),
+                    .mustContain(characterSet: String.symbolCharacters, atLeast: 1)
                 ]
             ),
             "YLWnz4r@7b"

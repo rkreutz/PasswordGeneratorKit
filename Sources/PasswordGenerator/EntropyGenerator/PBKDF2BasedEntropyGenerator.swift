@@ -3,10 +3,10 @@ import UIntX
 
 final class PBKDF2BasedEntropyGenerator: EntropyGenerator {
 
-    public let iterations: Int
-    public let bytes: Int
+    let iterations: Int
+    let bytes: Int
 
-    public init(
+    init(
         iterations: Int = 1_000,
         bytes: Int = 64
     ) {
@@ -15,7 +15,7 @@ final class PBKDF2BasedEntropyGenerator: EntropyGenerator {
         self.bytes = bytes
     }
 
-    public func generateEntropy(with salt: String, masterPassword: String) throws -> UIntX8 {
+    func generateEntropy(with salt: String, masterPassword: String) throws -> UIntX8 {
 
         let key = try PKCS5.PBKDF2(
             password: Array(masterPassword.utf8),
