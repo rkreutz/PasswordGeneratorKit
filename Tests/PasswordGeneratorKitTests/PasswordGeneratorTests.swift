@@ -1,5 +1,5 @@
 import XCTest
-@testable import PasswordGenerator
+@testable import PasswordGeneratorKit
 
 final class PasswordGeneratorTests: XCTestCase {
 

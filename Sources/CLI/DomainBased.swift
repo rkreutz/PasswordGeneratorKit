@@ -1,6 +1,6 @@
 import ArgumentParser
 import Foundation
-@testable import PasswordGenerator
+@testable import PasswordGeneratorKit
 
 struct DomainBased: ParsableCommand {
 

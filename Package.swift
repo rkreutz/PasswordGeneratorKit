@@ -3,11 +3,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "PasswordGenerator",
+    name: "PasswordGeneratorKit",
     products: [
         .library(
-            name: "PasswordGenerator",
-            targets: ["PasswordGenerator"]
+            name: "PasswordGeneratorKit",
+            targets: ["PasswordGeneratorKit"]
         ),
         .executable(
             name: "password-generator",
@@ -21,19 +21,19 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PasswordGenerator",
+            name: "PasswordGeneratorKit",
             dependencies: ["CryptoSwift", "UIntX"]
         ),
         .target(
             name: "CLI",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                "PasswordGenerator"
+                "PasswordGeneratorKit"
             ]
         ),
         .testTarget(
-            name: "PasswordGeneratorTests",
-            dependencies: ["PasswordGenerator", "UIntX"]
+            name: "PasswordGeneratorKitTests",
+            dependencies: ["PasswordGeneratorKit", "UIntX"]
         ),
     ]
 )

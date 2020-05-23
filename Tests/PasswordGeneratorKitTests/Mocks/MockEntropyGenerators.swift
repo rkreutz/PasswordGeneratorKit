@@ -1,5 +1,5 @@
 import UIntX
-@testable import PasswordGenerator
+@testable import PasswordGeneratorKit
 
 final class UIntXEntropyGenerator: EntropyGenerator {
 

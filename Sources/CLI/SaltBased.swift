@@ -1,5 +1,5 @@
 import ArgumentParser
-@testable import PasswordGenerator
+@testable import PasswordGeneratorKit
 
 struct SaltBased: ParsableCommand {
 
