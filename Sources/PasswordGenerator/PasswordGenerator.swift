@@ -4,11 +4,13 @@ public final class PasswordGenerator {
 
     private let passwordGenerator: GenericPasswordGenerator<UIntX8>
 
-    public init(masterPasswordProvider: MasterPasswordProvider) {
+    public init(masterPasswordProvider: MasterPasswordProvider,
+                iterations: Int = 1_000,
+                bytes: Int = 64) {
 
         self.passwordGenerator = GenericPasswordGenerator<UIntX8>(
             masterPasswordProvider: masterPasswordProvider,
-            entropyGenerator: PBKDF2BasedEntropyGenerator()
+            entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: iterations, bytes: bytes)
         )
     }
 
