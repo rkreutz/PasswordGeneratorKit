@@ -12,6 +12,10 @@ let package = Package(
         .executable(
             name: "password-generator",
             targets: ["CLI"]
+        ),
+        .library(
+            name: "PasswordGeneratorKitPublishers",
+            targets: ["PasswordGeneratorKitPublishers"]
         )
     ],
     dependencies: [
@@ -31,9 +35,14 @@ let package = Package(
                 "PasswordGeneratorKit"
             ]
         ),
+        .target(
+            name: "PasswordGeneratorKitPublishers",
+            dependencies: ["PasswordGeneratorKit"]
+        ),
         .testTarget(
             name: "PasswordGeneratorKitTests",
             dependencies: ["PasswordGeneratorKit", "UIntX"]
         ),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )

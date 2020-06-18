@@ -1,4 +1,4 @@
 public protocol MasterPasswordProvider {
 
-    var masterPassword: String { get }
+    func masterPassword() throws -> String
 }

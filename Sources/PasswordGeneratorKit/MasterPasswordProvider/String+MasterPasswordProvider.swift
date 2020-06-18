@@ -1,4 +1,4 @@
 extension String: MasterPasswordProvider {
 
-    public var masterPassword: String { self }
+    public func masterPassword() -> String { self }
 }

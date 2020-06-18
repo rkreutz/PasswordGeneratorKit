@@ -41,7 +41,14 @@ final class GenericPasswordGenerator<Entropy: BinaryInteger> {
             throw PasswordGenerator.Error.mustSpecifyAtLeastOneCharacterSet
         }
 
-        let masterPassword = masterPasswordProvider.masterPassword
+        let masterPassword: String
+        do {
+
+            masterPassword = try masterPasswordProvider.masterPassword()
+        } catch {
+
+            throw PasswordGenerator.Error.failedToFetchMasterPassword(error)
+        }
 
         var entropy: Entropy
         do {

@@ -5,6 +5,7 @@ public extension PasswordGenerator {
         case entropyGenerationError(Swift.Error)
         case mustSpecifyLength
         case mustSpecifyAtLeastOneCharacterSet
+        case failedToFetchMasterPassword(Swift.Error)
     }
 }
 
