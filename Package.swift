@@ -13,10 +13,12 @@ let package = Package(
             name: "password-generator",
             targets: ["CLI"]
         ),
+        #if !os(Linux)
         .library(
             name: "PasswordGeneratorKitPublishers",
             targets: ["PasswordGeneratorKitPublishers"]
         )
+        #endif
     ],
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMajor(from: "1.0.0")),
@@ -35,10 +37,12 @@ let package = Package(
                 "PasswordGeneratorKit"
             ]
         ),
+        #if !os(Linux)
         .target(
             name: "PasswordGeneratorKitPublishers",
             dependencies: ["PasswordGeneratorKit"]
         ),
+        #endif
         .testTarget(
             name: "PasswordGeneratorKitTests",
             dependencies: ["PasswordGeneratorKit", "UIntX"]
