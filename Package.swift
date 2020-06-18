@@ -13,7 +13,8 @@ let package = Package(
             name: "password-generator",
             targets: ["CLI"]
         ),
-        #if !os(Linux)
+        #if os(Linux)
+        #else
         .library(
             name: "PasswordGeneratorKitPublishers",
             targets: ["PasswordGeneratorKitPublishers"]
@@ -37,7 +38,8 @@ let package = Package(
                 "PasswordGeneratorKit"
             ]
         ),
-        #if !os(Linux)
+        #if os(Linux)
+        #else
         .target(
             name: "PasswordGeneratorKitPublishers",
             dependencies: ["PasswordGeneratorKit"]
