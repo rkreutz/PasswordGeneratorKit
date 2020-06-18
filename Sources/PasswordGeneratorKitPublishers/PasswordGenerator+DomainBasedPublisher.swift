@@ -16,7 +16,7 @@ private extension PasswordGenerator {
         var seed: Int
         var rules: Set<PasswordRule>
 
-        func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
+        func receive<S>(subscriber: S) where S: Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
 
             let subscription = Subscription(
                 subscriber: subscriber,
@@ -96,7 +96,12 @@ private extension PasswordGenerator {
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension PasswordGenerator.Publishers {
 
-    func generatePassword(username: String, domain: String, seed: Int, rules: Set<PasswordRule>) -> AnyPublisher<String, PasswordGenerator.Error> {
+    func generatePassword(
+        username: String,
+        domain: String,
+        seed: Int,
+        rules: Set<PasswordRule>
+    ) -> AnyPublisher<String, PasswordGenerator.Error> {
 
         PasswordGenerator.Publisher(generator: generator, username: username, domain: domain, seed: seed, rules: rules)
             .eraseToAnyPublisher()

@@ -14,7 +14,7 @@ private extension PasswordGenerator {
         var salt: String
         var rules: Set<PasswordRule>
 
-        func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
+        func receive<S>(subscriber: S) where S: Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
 
             let subscription = Subscription(
                 subscriber: subscriber,
