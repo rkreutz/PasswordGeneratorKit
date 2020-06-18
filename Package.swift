@@ -9,17 +9,16 @@ let package = Package(
             name: "PasswordGeneratorKit",
             targets: ["PasswordGeneratorKit"]
         ),
-        .executable(
-            name: "password-generator",
-            targets: ["CLI"]
-        ),
-        #if os(Linux)
-        #else
+        #if canImport(Combine)
         .library(
             name: "PasswordGeneratorKitPublishers",
             targets: ["PasswordGeneratorKitPublishers"]
-        )
+        ),
         #endif
+        .executable(
+            name: "password-generator",
+            targets: ["CLI"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMajor(from: "1.0.0")),
@@ -38,8 +37,7 @@ let package = Package(
                 "PasswordGeneratorKit"
             ]
         ),
-        #if os(Linux)
-        #else
+        #if canImport(Combine)
         .target(
             name: "PasswordGeneratorKitPublishers",
             dependencies: ["PasswordGeneratorKit"]
@@ -48,7 +46,7 @@ let package = Package(
         .testTarget(
             name: "PasswordGeneratorKitTests",
             dependencies: ["PasswordGeneratorKit", "UIntX"]
-        ),
+        )
     ],
     swiftLanguageVersions: [.v5]
 )
