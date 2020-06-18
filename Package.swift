@@ -3,6 +3,22 @@
 import PackageDescription
 
 #if canImport(Combine)
+
+let products: [Product] = [
+    .library(
+        name: "PasswordGeneratorKit",
+        targets: ["PasswordGeneratorKit"]
+    ),
+    .library(
+        name: "PasswordGeneratorKitPublishers",
+        targets: ["PasswordGeneratorKitPublishers"]
+    ),
+    .executable(
+        name: "password-generator",
+        targets: ["CLI"]
+    )
+]
+
 let targets: [Target] = [
     .target(
         name: "PasswordGeneratorKit",
@@ -24,7 +40,20 @@ let targets: [Target] = [
         dependencies: ["PasswordGeneratorKit", "UIntX"]
     )
 ]
+
 #else
+
+let products: [Product] = [
+    .library(
+        name: "PasswordGeneratorKit",
+        targets: ["PasswordGeneratorKit"]
+    ),
+    .executable(
+        name: "password-generator",
+        targets: ["CLI"]
+    )
+]
+
 let targets: [Target] = [
     .target(
         name: "PasswordGeneratorKit",
@@ -42,24 +71,12 @@ let targets: [Target] = [
         dependencies: ["PasswordGeneratorKit", "UIntX"]
     )
 ]
+
 #endif
 
 let package = Package(
     name: "PasswordGeneratorKit",
-    products: [
-        .library(
-            name: "PasswordGeneratorKit",
-            targets: ["PasswordGeneratorKit"]
-        ),
-        .library(
-            name: "PasswordGeneratorKitPublishers",
-            targets: ["PasswordGeneratorKitPublishers"]
-        ),
-        .executable(
-            name: "password-generator",
-            targets: ["CLI"]
-        )
-    ],
+    products: products,
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/rkreutz/UIntX", .upToNextMajor(from: "1.0.1")),
