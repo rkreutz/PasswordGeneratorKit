@@ -84,7 +84,7 @@ private extension PasswordGenerator {
 }
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension PasswordGenerator.Publishers {
+public extension PasswordGenerator.Publishers {
 
     func generatePassword(service: String, rules: Set<PasswordRule>) -> AnyPublisher<String, PasswordGenerator.Error> {
 
