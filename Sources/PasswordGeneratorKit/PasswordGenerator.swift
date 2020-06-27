@@ -2,13 +2,13 @@ import UIntX
 
 public final class PasswordGenerator {
 
-    private let passwordGenerator: GenericPasswordGenerator<UIntX8>
+    private let passwordGenerator: GenericPasswordGenerator<UIntX64>
 
     public init(masterPasswordProvider: MasterPasswordProvider,
-                iterations: Int = 1_000,
-                bytes: Int = 64) {
+                iterations: Int = 100,
+                bytes: Int = 8) {
 
-        self.passwordGenerator = GenericPasswordGenerator<UIntX8>(
+        self.passwordGenerator = GenericPasswordGenerator<UIntX64>(
             masterPasswordProvider: masterPasswordProvider,
             entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: iterations, bytes: bytes)
         )

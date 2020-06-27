@@ -4,7 +4,8 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
     [
         testCase(PasswordGeneratorTests.allTests),
-        testCase(GenericPasswordGeneratorTests.allTests)
+        testCase(GenericPasswordGeneratorTests.allTests),
+        testCase(PerformanceTests.allTests)
     ]
 }
 #endif

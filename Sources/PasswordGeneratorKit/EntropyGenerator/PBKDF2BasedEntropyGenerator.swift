@@ -1,7 +1,9 @@
 import CryptoSwift
 import UIntX
 
-final class PBKDF2BasedEntropyGenerator: EntropyGenerator {
+final class PBKDF2BasedEntropyGenerator<BaseInteger>: EntropyGenerator
+where BaseInteger: FixedWidthInteger,
+      BaseInteger: UnsignedInteger {
 
     let iterations: Int
     let bytes: Int
@@ -15,7 +17,7 @@ final class PBKDF2BasedEntropyGenerator: EntropyGenerator {
         self.bytes = bytes
     }
 
-    func generateEntropy(with salt: String, masterPassword: String) throws -> UIntX8 {
+    func generateEntropy(with salt: String, masterPassword: String) throws -> UIntX<BaseInteger> {
 
         let key = try PKCS5.PBKDF2(
             password: Array(masterPassword.utf8),
@@ -26,6 +28,6 @@ final class PBKDF2BasedEntropyGenerator: EntropyGenerator {
         )
         .calculate()
 
-        return UIntX8(ascendingArray: key.reversed())
+        return UIntX<BaseInteger>(ascendingArray: key.reversed())
     }
 }

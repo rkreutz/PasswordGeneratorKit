@@ -23,14 +23,12 @@ struct ServiceBased: ParsableCommand {
 
         print("\nGenerating password...\n")
 
-        let passwordGenerator = GenericPasswordGenerator(
+        let passwordGenerator = PasswordGenerator(
             masterPasswordProvider: options.masterPassword,
-            entropyGenerator: PBKDF2BasedEntropyGenerator(
-                iterations: options.keyIterations,
-                bytes: options.keyLength
-            )
+            iterations: options.keyIterations,
+            bytes: options.keyLength
         )
-
+        
         let generatedPassword = try passwordGenerator.generatePassword(
             service: service,
             rules: Set(options.allowedCharacters.map { $0.asPasswordRule() }).union([.length(options.length)])
