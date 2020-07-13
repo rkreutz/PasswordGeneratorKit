@@ -9,7 +9,7 @@ final class PasswordGeneratorTests: XCTestCase {
 
         XCTAssertEqual(
             try generator.generatePassword(salt: "salt", rules: PasswordRule.defaultRules),
-            "KNn&8Rf-s@V%wq8@"
+            "K-T#Mq1$MvQ4@%6l"
         )
     }
 
@@ -24,7 +24,7 @@ final class PasswordGeneratorTests: XCTestCase {
                 seed: 1,
                 rules: PasswordRule.defaultRules
             ),
-            "qtYSYWdB?.4rSM&9"
+            "L5bnoSNxy5OZ_6LE"
         )
 
         XCTAssertEqual(
@@ -34,7 +34,7 @@ final class PasswordGeneratorTests: XCTestCase {
                 seed: 2,
                 rules: PasswordRule.defaultRules
             ),
-            "7Ut39lh|K5@UVvSz"
+            "&qilq&O_M.J&oR11"
         )
     }
 
@@ -44,7 +44,7 @@ final class PasswordGeneratorTests: XCTestCase {
 
         XCTAssertEqual(
             try generator.generatePassword(service: "Bank name", rules: PasswordRule.defaultRules),
-            "au1_m-_Ix-hkayw9"
+            "Aekve?RLjcc4XD8!"
         )
     }
 
@@ -86,7 +86,7 @@ final class PasswordGeneratorTests: XCTestCase {
                     .mustContain(characterSet: String.symbolCharacters, atLeast: 1)
                 ]
             ),
-            "ojCgeH8B8&"
+            "YLWnz4r@7b"
         )
 
         XCTAssertEqual(
@@ -97,7 +97,7 @@ final class PasswordGeneratorTests: XCTestCase {
                     .mustContain(characterSet: String.decimalCharacters, atLeast: 0)
                 ]
             ),
-            "7249"
+            "3979"
         )
     }
 
