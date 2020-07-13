@@ -4,10 +4,10 @@ struct PasswordGeneratorCLI: ParsableCommand {
 
     struct Options: ParsableArguments {
 
-        @Option(name: .long, default: 100, help: "The number of iterations to be used to generate a PBKDF2 key")
+        @Option(name: .long, default: 1_000, help: "The number of iterations to be used to generate a PBKDF2 key")
         var keyIterations: Int
 
-        @Option(name: .long, default: 8, help: "The size in bytes of the PBKDF2 key")
+        @Option(name: .long, default: 64, help: "The size in bytes of the PBKDF2 key")
         var keyLength: Int
         
         @Option(name: .shortAndLong, help: "The master password to be used")

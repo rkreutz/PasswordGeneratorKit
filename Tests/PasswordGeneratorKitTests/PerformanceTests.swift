@@ -10,7 +10,7 @@ final class PerformanceTests: XCTestCase {
             masterPasswordProvider: "masterPassword",
             entropyGenerator: PBKDF2BasedEntropyGenerator(
                 iterations: 1_000,
-                bytes: 4
+                bytes: 32
             )
         )
 
@@ -23,7 +23,7 @@ final class PerformanceTests: XCTestCase {
                     seed: 1,
                     rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
                 ),
-                "nEO7cM?Za%x682Ta0iNPbO9er6vsekY?"
+                "D&Wij1OxF-row84yvsz8BYE3UnmV3B%Q"
             )
         }
     }
@@ -34,7 +34,7 @@ final class PerformanceTests: XCTestCase {
             masterPasswordProvider: "masterPassword",
             entropyGenerator: PBKDF2BasedEntropyGenerator(
                 iterations: 100,
-                bytes: 8
+                bytes: 64
             )
         )
 
@@ -47,7 +47,7 @@ final class PerformanceTests: XCTestCase {
                     seed: 1,
                     rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
                 ),
-                "tYSYWdB?4rSq&89I.|Z|Ul0ITql1MHCK"
+                "yPGPRraFcXJ!Tk%1H3ib8RttZ0dZK#v!"
             )
         }
     }
