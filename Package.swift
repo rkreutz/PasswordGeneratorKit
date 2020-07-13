@@ -2,80 +2,65 @@
 
 import PackageDescription
 
-#if canImport(Combine)
+var platforms: [SupportedPlatform]?
 
-let products: [Product] = [
+var products: [Product] = [
     .library(
         name: "PasswordGeneratorKit",
         targets: ["PasswordGeneratorKit"]
     ),
+    .executable(
+        name: "password-generator",
+        targets: ["CLI"]
+    )
+]
+
+var targets: [Target] = [
+    .target(
+        name: "PasswordGeneratorKit",
+        dependencies: ["CryptoSwift", "UIntX"]
+    ),
+    .target(
+        name: "CLI",
+        dependencies: [
+            .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            "PasswordGeneratorKit"
+        ]
+    ),
+    .testTarget(
+        name: "PasswordGeneratorKitTests",
+        dependencies: ["PasswordGeneratorKit", "UIntX"]
+    )
+]
+
+#if canImport(Combine)
+
+platforms = [
+    .iOS(.v13),
+    .macOS(.v10_15),
+    .tvOS(.v13),
+    .watchOS(.v6)
+]
+
+products.append(
     .library(
         name: "PasswordGeneratorKitPublishers",
         targets: ["PasswordGeneratorKitPublishers"]
-    ),
-    .executable(
-        name: "password-generator",
-        targets: ["CLI"]
     )
-]
+)
 
-let targets: [Target] = [
-    .target(
-        name: "PasswordGeneratorKit",
-        dependencies: ["CryptoSwift", "UIntX"]
-    ),
-    .target(
-        name: "CLI",
-        dependencies: [
-            .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            "PasswordGeneratorKit"
-        ]
-    ),
+targets.append(
     .target(
         name: "PasswordGeneratorKitPublishers",
         dependencies: ["PasswordGeneratorKit"]
-    ),
-    .testTarget(
-        name: "PasswordGeneratorKitTests",
-        dependencies: ["PasswordGeneratorKit", "UIntX"]
     )
-]
-
-#else
-
-let products: [Product] = [
-    .library(
-        name: "PasswordGeneratorKit",
-        targets: ["PasswordGeneratorKit"]
-    ),
-    .executable(
-        name: "password-generator",
-        targets: ["CLI"]
-    )
-]
-
-let targets: [Target] = [
-    .target(
-        name: "PasswordGeneratorKit",
-        dependencies: ["CryptoSwift", "UIntX"]
-    ),
-    .target(
-        name: "CLI",
-        dependencies: [
-            .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            "PasswordGeneratorKit"
-        ]
-    ),
-    .testTarget(
-        name: "PasswordGeneratorKitTests",
-        dependencies: ["PasswordGeneratorKit", "UIntX"]
-    )
-]
+)
 
 #endif
 
 let package = Package(
     name: "PasswordGeneratorKit",
+    platforms: platforms,
     products: products,
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMajor(from: "1.0.0")),
