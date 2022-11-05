@@ -1,5 +1,5 @@
 import ArgumentParser
-@testable import PasswordGeneratorKit
+import PasswordGeneratorKit
 
 struct SaltBased: ParsableCommand {
 
@@ -11,30 +11,69 @@ struct SaltBased: ParsableCommand {
 
     func run() throws {
 
-        print(
-            """
-            key-length: \(options.keyLength)
-            key-iterations: \(options.keyIterations)
-            salt: \(salt)
-            length: \(options.length)
-            allowedCharacters: \(options.allowedCharacters)
-            """
-        )
+        let passwordGenerator: PasswordGenerator
+        switch options.entropySource {
+        case .pbkdf2:
+            passwordGenerator = PasswordGenerator(
+                masterPasswordProvider: options.masterPassword,
+                entropyGenerator: .pbkdf2(iterations: options.iterations),
+                bytes: options.entropy
+            )
 
-        print("\nGenerating password...\n")
+            if options.verbose {
+                print(
+                    """
+                    entropy-source: pbkdf2
+                        - iterations: \(options.iterations)
+                    entropy: \(options.entropy) B
+                    """
+                )
+            }
 
-        let passwordGenerator = PasswordGenerator(
-            masterPasswordProvider: options.masterPassword,
-            iterations: options.keyIterations,
-            bytes: options.keyLength
-        )
+        case .argon2:
+            passwordGenerator = PasswordGenerator(
+                masterPasswordProvider: options.masterPassword,
+                entropyGenerator: .argon2(
+                    iterations: options.iterations,
+                    memory: options.memory,
+                    threads: options.threads
+                ),
+                bytes: options.entropy
+            )
+            if options.verbose {
+                print(
+                """
+                entropy-source: argon2
+                    - iterations: \(options.iterations)
+                    - memory: \(options.memory) kB
+                    - threads: \(options.threads)
+                entropy: \(options.entropy) B
+                """
+                )
+            }
+        }
+
+        if options.verbose {
+            print(
+                """
+                salt: \(salt)
+                length: \(options.length)
+                allowed-characters: \(options.allowedCharacters.map(\.rawValue).joined(separator: ","))
+                """
+            )
+
+            print("\nGenerating password...\n")
+        }
 
         let generatedPassword = try passwordGenerator.generatePassword(
             salt: salt,
             rules: Set(options.allowedCharacters.map { $0.asPasswordRule() }).union([.length(options.length)])
         )
 
-        print("Generated password is:")
+        if options.verbose {
+            print("Generated password is:")
+        }
+
         print(generatedPassword)
     }
 }

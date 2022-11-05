@@ -5,7 +5,7 @@ final class PasswordGeneratorTests: XCTestCase {
 
     func testSaltPasswordGeneration() {
 
-        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword")
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", bytes: 64)
 
         XCTAssertEqual(
             try generator.generatePassword(salt: "salt", rules: PasswordRule.defaultRules),
@@ -13,9 +13,19 @@ final class PasswordGeneratorTests: XCTestCase {
         )
     }
 
+    func testSaltPasswordGenerationWithArgon2() {
+
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", entropyGenerator: .argon2(), bytes: 64)
+
+        XCTAssertEqual(
+            try generator.generatePassword(salt: "salt", rules: PasswordRule.defaultRules),
+            "-Zxrp4h2ttF-xRRu"
+        )
+    }
+
     func testUsernameDomainPasswordGeneration() {
 
-        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword")
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", bytes: 64)
 
         XCTAssertEqual(
             try generator.generatePassword(
@@ -38,9 +48,34 @@ final class PasswordGeneratorTests: XCTestCase {
         )
     }
 
+    func testUsernameDomainPasswordGenerationWithArgon2() {
+
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", entropyGenerator: .argon2(), bytes: 64)
+
+        XCTAssertEqual(
+            try generator.generatePassword(
+                username: "rkreutz",
+                domain: "github.com",
+                seed: 1,
+                rules: PasswordRule.defaultRules
+            ),
+            "!Z$x.zspWIm6anmR"
+        )
+
+        XCTAssertEqual(
+            try generator.generatePassword(
+                username: "rkreutz",
+                domain: "github.com",
+                seed: 2,
+                rules: PasswordRule.defaultRules
+            ),
+            "kDzQpUYDcQO4toe_"
+        )
+    }
+
     func testServicePasswordGenerator() {
 
-        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword")
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", bytes: 64)
 
         XCTAssertEqual(
             try generator.generatePassword(service: "Bank name", rules: PasswordRule.defaultRules),
@@ -48,9 +83,19 @@ final class PasswordGeneratorTests: XCTestCase {
         )
     }
 
+    func testServicePasswordGeneratorWithArgon2() {
+
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", entropyGenerator: .argon2(), bytes: 64)
+
+        XCTAssertEqual(
+            try generator.generatePassword(service: "Bank name", rules: PasswordRule.defaultRules),
+            "6NfR?T@qfsOFzVWo"
+        )
+    }
+
     func testRuleSetValidation() {
 
-        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword")
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", bytes: 64)
 
         XCTAssertThrowsError(try generator.generatePassword(salt: "salt", rules: [])) { error in
 
@@ -73,7 +118,7 @@ final class PasswordGeneratorTests: XCTestCase {
 
     func testCharacterRules() {
 
-        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword")
+        let generator = PasswordGenerator(masterPasswordProvider: "masterPassword", bytes: 64)
 
         XCTAssertEqual(
             try generator.generatePassword(
@@ -103,8 +148,11 @@ final class PasswordGeneratorTests: XCTestCase {
 
     static var allTests = [
         ("testSaltPasswordGeneration", testSaltPasswordGeneration),
+        ("testSaltPasswordGenerationWithArgon2", testSaltPasswordGenerationWithArgon2),
         ("testUsernameDomainPasswordGeneration", testUsernameDomainPasswordGeneration),
+        ("testUsernameDomainPasswordGenerationWithArgon2", testUsernameDomainPasswordGenerationWithArgon2),
         ("testServicePasswordGenerator", testServicePasswordGenerator),
+        ("testServicePasswordGeneratorWithArgon2", testServicePasswordGeneratorWithArgon2),
         ("testRuleSetValidation", testRuleSetValidation),
         ("testCharacterRules", testCharacterRules)
     ]

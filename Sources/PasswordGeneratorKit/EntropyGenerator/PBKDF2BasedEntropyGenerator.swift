@@ -5,12 +5,12 @@ final class PBKDF2BasedEntropyGenerator<BaseInteger>: EntropyGenerator
 where BaseInteger: FixedWidthInteger,
       BaseInteger: UnsignedInteger {
 
-    let iterations: Int
-    let bytes: Int
+    let iterations: UInt
+    let bytes: UInt
 
     init(
-        iterations: Int = 1_000,
-        bytes: Int = 64
+        iterations: UInt = 1_000,
+        bytes: UInt = 64
     ) {
 
         self.iterations = iterations
@@ -22,12 +22,12 @@ where BaseInteger: FixedWidthInteger,
         let key = try PKCS5.PBKDF2(
             password: Array(masterPassword.utf8),
             salt: Array(salt.utf8),
-            iterations: iterations,
-            keyLength: bytes,
-            variant: .sha256
+            iterations: Int(clamping: iterations),
+            keyLength: Int(clamping: bytes),
+            variant: .sha2(.sha256)
         )
         .calculate()
 
-        return UIntX<BaseInteger>(ascendingArray: key.reversed())
+        return UIntX<BaseInteger>(bigEndianArray: key)
     }
 }

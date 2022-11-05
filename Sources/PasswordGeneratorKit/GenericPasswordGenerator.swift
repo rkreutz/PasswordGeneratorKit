@@ -1,7 +1,7 @@
 final class GenericPasswordGenerator<Entropy: BinaryInteger> {
 
-    let masterPasswordProvider: MasterPasswordProvider
-    let entropyGenerator: AnyEntropyGenerator<Entropy>
+    private let masterPasswordProvider: MasterPasswordProvider
+    private let entropyGenerator: AnyEntropyGenerator<Entropy>
 
     init<Generator: EntropyGenerator>(
         masterPasswordProvider: MasterPasswordProvider,
@@ -62,7 +62,7 @@ final class GenericPasswordGenerator<Entropy: BinaryInteger> {
         var generatedPassword = ""
         var allowedCharacters = ""
         var extraCharacters = ""
-        var extraCount = 0
+        var extraCount: UInt = 0
         for case let .mustContain(characterSet, count) in rules.sorted() {
 
             allowedCharacters += characterSet

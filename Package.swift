@@ -18,7 +18,7 @@ var products: [Product] = [
 var targets: [Target] = [
     .target(
         name: "PasswordGeneratorKit",
-        dependencies: ["CryptoSwift", "UIntX"]
+        dependencies: ["CryptoSwift", "UIntX", "Argon2Kit"]
     ),
     .target(
         name: "CLI",
@@ -64,8 +64,9 @@ let package = Package(
     products: products,
     dependencies: [
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/rkreutz/UIntX", .upToNextMajor(from: "2.0.0")),
-        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.0.1"))
+        .package(url: "https://github.com/rkreutz/UIntX", .upToNextMajor(from: "3.0.0")),
+        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.0.1")),
+        .package(url: "https://github.com/rkreutz/Argon2Kit", .upToNextMajor(from: "0.1.1"))
     ],
     targets: targets,
     swiftLanguageVersions: [.v5]

@@ -5,8 +5,7 @@ public func allTests() -> [XCTestCaseEntry] {
     [
         testCase(EntropyGeneratorTests.allTests),
         testCase(PasswordGeneratorTests.allTests),
-        testCase(GenericPasswordGeneratorTests.allTests),
-        testCase(PerformanceTests.allTests)
+        testCase(GenericPasswordGeneratorTests.allTests)
     ]
 }
 #endif
