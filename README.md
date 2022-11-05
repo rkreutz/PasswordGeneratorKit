@@ -77,8 +77,12 @@ print(generatedPassword) // L5bnoSNxy5OZ_6LE     -> Don't even bother this is no
 
 ## CLI
 
-There is a CLI for using the password generator:
+There is a CLI for using the password generator, you can easily download it from the latest Release or compile it locally with:
+```bash
+swift build --configuration release
+```
 
+### Usage
 ```bash
 > password-generator --help (master) 
 OVERVIEW: Deterministic password generator.
