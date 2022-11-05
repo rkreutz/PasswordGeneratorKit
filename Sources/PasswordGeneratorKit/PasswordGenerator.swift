@@ -2,16 +2,35 @@ import UIntX
 
 public final class PasswordGenerator {
 
+    public enum EntropyGenerator {
+        case pbkdf2(iterations: UInt = 1_000)
+        case argon2(iterations: UInt = 3, memory: UInt = 16_384, threads: UInt = 1)
+    }
+
     private let passwordGenerator: GenericPasswordGenerator<UIntX64>
 
     public init(masterPasswordProvider: MasterPasswordProvider,
-                iterations: Int = 1_000,
-                bytes: Int = 64) {
+                entropyGenerator: EntropyGenerator = .pbkdf2(),
+                bytes: UInt = 64) {
 
-        self.passwordGenerator = GenericPasswordGenerator<UIntX64>(
-            masterPasswordProvider: masterPasswordProvider,
-            entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: iterations, bytes: bytes)
-        )
+        switch entropyGenerator {
+        case let .pbkdf2(iterations):
+            self.passwordGenerator = GenericPasswordGenerator<UIntX64>(
+                masterPasswordProvider: masterPasswordProvider,
+                entropyGenerator: PBKDF2BasedEntropyGenerator(iterations: iterations, bytes: bytes)
+            )
+
+        case let .argon2(iterations, memory, threads):
+            self.passwordGenerator = GenericPasswordGenerator<UIntX64>(
+                masterPasswordProvider: masterPasswordProvider,
+                entropyGenerator: Argon2BasedEntropyGenerator(
+                    iterations: iterations,
+                    memory: memory,
+                    threads: threads,
+                    bytes: bytes
+                )
+            )
+        }
     }
 
     public func generatePassword(username: String, domain: String, seed: Int, rules: Set<PasswordRule>) throws -> String {

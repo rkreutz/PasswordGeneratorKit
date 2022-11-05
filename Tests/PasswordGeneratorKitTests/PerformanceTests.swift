@@ -4,42 +4,66 @@ import UIntX
 
 final class PerformanceTests: XCTestCase {
 
-    func test1000IterationsUIntX64() {
-
-        let generator = GenericPasswordGenerator<UIntX64>(
-            masterPasswordProvider: "masterPassword",
-            entropyGenerator: PBKDF2BasedEntropyGenerator(
-                iterations: 1_000,
-                bytes: 32
-            )
+    func testEntropyGenerator() {
+        let generator = Argon2BasedEntropyGenerator<UInt64>(
+            iterations: 3,
+            memory: 16_384,
+            threads: 1,
+            bytes: 24
         )
 
         measure {
-
             XCTAssertEqual(
-                try? generator.generatePassword(
-                    username: "rkreutz",
-                    domain: "github.com",
-                    seed: 1,
-                    rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
-                ),
-                "D&Wij1OxF-row84yvsz8BYE3UnmV3B%Q"
+                try? generator.generateEntropy(with: "salt", masterPassword: "masterPassword").bitWidth,
+                192
             )
         }
     }
 
-    func test100IterationsUIntX64() {
+    func testEntropyGeneratorAlt2() {
+        let generator = Argon2BasedEntropyGenerator<UInt64>(
+            iterations: 3,
+            memory: 16_384,
+            threads: 1,
+            bytes: 32
+        )
 
+        measure {
+            XCTAssertEqual(
+                try? generator.generateEntropy(with: "salt", masterPassword: "masterPassword").bitWidth,
+                256
+            )
+        }
+    }
+
+    func testEntropyGeneratorAlt3() {
+        let generator = Argon2BasedEntropyGenerator<UInt64>(
+            iterations: 3,
+            memory: 16_384,
+            threads: 1,
+            bytes: 64
+        )
+
+        measure {
+            XCTAssertEqual(
+                try? generator.generateEntropy(with: "salt", masterPassword: "masterPassword").bitWidth,
+                512
+            )
+        }
+    }
+
+    func testMostEntropy() {
         let generator = GenericPasswordGenerator<UIntX64>(
             masterPasswordProvider: "masterPassword",
-            entropyGenerator: PBKDF2BasedEntropyGenerator(
-                iterations: 100,
+            entropyGenerator: Argon2BasedEntropyGenerator(
+                iterations: 3,
+                memory: 16_384,
+                threads: 1,
                 bytes: 64
             )
         )
 
         measure {
-
             XCTAssertEqual(
                 try? generator.generatePassword(
                     username: "rkreutz",
@@ -47,23 +71,23 @@ final class PerformanceTests: XCTestCase {
                     seed: 1,
                     rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
                 ),
-                "yPGPRraFcXJ!Tk%1H3ib8RttZ0dZK#v!"
+                "$!Zx.sp6WImanmR5uEZEe06OFKM#QzFA"
             )
         }
     }
 
-    func test1000IterationsUIntX8() {
-
-        let generator = GenericPasswordGenerator<UIntX8>(
+    func testReasonableEntropy() {
+        let generator = GenericPasswordGenerator<UIntX64>(
             masterPasswordProvider: "masterPassword",
-            entropyGenerator: PBKDF2BasedEntropyGenerator(
-                iterations: 1_000,
-                bytes: 24
+            entropyGenerator: Argon2BasedEntropyGenerator(
+                iterations: 3,
+                memory: 16_384,
+                threads: 1,
+                bytes: 32
             )
         )
 
         measure {
-
             XCTAssertEqual(
                 try? generator.generatePassword(
                     username: "rkreutz",
@@ -71,23 +95,23 @@ final class PerformanceTests: XCTestCase {
                     seed: 1,
                     rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
                 ),
-                "nK4TQd%%zCc2m1cHjPJ%%G_i.W7@!zz3"
+                "AloP5-B77zZoY@l&!0qrwv1_zVLO.t?5"
             )
         }
     }
 
-    func test100IterationsUIntX8() {
-
-        let generator = GenericPasswordGenerator<UIntX8>(
+    func testMostEfficient() {
+        let generator = GenericPasswordGenerator<UIntX64>(
             masterPasswordProvider: "masterPassword",
-            entropyGenerator: PBKDF2BasedEntropyGenerator(
-                iterations: 100,
-                bytes: 24
+            entropyGenerator: Argon2BasedEntropyGenerator(
+                iterations: 3,
+                memory: 16_384,
+                threads: 1,
+                bytes: 24 // 24 gives best performance with 32 bytes max pwd length
             )
         )
 
         measure {
-
             XCTAssertEqual(
                 try? generator.generatePassword(
                     username: "rkreutz",
@@ -95,16 +119,9 @@ final class PerformanceTests: XCTestCase {
                     seed: 1,
                     rules: PasswordRule.defaultCharacterSet.union([PasswordRule.length(32)])
                 ),
-                "pB2U&Qz@wub@HPt4k5sJcYWThUo!Pzbq"
+                "tC1nlz?|cE.R-@b!1@zI8CbOneRv6Hm-"
             )
         }
     }
-
-    static var allTests = [
-        ("test1000IterationsUIntX64", test1000IterationsUIntX64),
-        ("test100IterationsUIntX64", test100IterationsUIntX64),
-        ("test1000IterationsUIntX8", test1000IterationsUIntX8),
-        ("test100IterationsUIntX8", test100IterationsUIntX8)
-    ]
 }
 

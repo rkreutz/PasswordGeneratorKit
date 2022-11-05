@@ -3,7 +3,7 @@ extension BinaryInteger {
     func consumeEntropy(
         generatedPassword: String,
         characters: String,
-        maxLength: Int
+        maxLength: UInt
     ) -> (password: String, remainingEntropy: Self) {
 
         guard generatedPassword.count < maxLength else { return (generatedPassword, self) }
