@@ -3,8 +3,7 @@
 [![Swift Package Manager](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub tag](https://img.shields.io/github/tag/rkreutz/PasswordGeneratorKit.svg)](https://GitHub.com/rkreutz/PasswordGeneratorKit/tags/)
-![MacOS](https://github.com/rkreutz/PasswordGeneratorKit/workflows/MacOS/badge.svg?branch=master&event=push)
-![Linux](https://github.com/rkreutz/PasswordGeneratorKit/workflows/Linux/badge.svg?branch=master&event=push)
+[![Run Tests](https://github.com/rkreutz/PasswordGeneratorKit/actions/workflows/tests.yml/badge.svg)](https://github.com/rkreutz/PasswordGeneratorKit/actions/workflows/tests.yml)
 
 As the name implies, this is a Swift Package that generates passwords pseudo-randomically deriving from a master password and some other inputs.
 
