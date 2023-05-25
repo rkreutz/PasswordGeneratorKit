@@ -1,3 +1,5 @@
+import Foundation
+
 final class GenericPasswordGenerator<Entropy: BinaryInteger> {
 
     private let masterPasswordProvider: MasterPasswordProvider
@@ -59,6 +61,53 @@ final class GenericPasswordGenerator<Entropy: BinaryInteger> {
             throw PasswordGenerator.Error.entropyGenerationError(error)
         }
 
+        return generatePassword(from: &entropy, rules: rules, length: length)
+    }
+
+    func profilePasswordGeneration(iterations: Int, passwordLengths: [UInt]) throws -> PasswordGenerationProfilingResult {
+
+        var entropyGenerationMeasurements = [TimeInterval]()
+        var computationMeasurements = [[TimeInterval]].init(repeating: [], count: passwordLengths.count)
+        var totalMeasurements = [[TimeInterval]].init(repeating: [], count: computationMeasurements.count)
+        for _ in 0 ..< iterations {
+
+            let startEntropy = Date()
+            let entropy: Entropy
+            do {
+
+                entropy = try entropyGenerator.generateEntropy(with: "salt", masterPassword: "masterPassword")
+            } catch {
+
+                throw PasswordGenerator.Error.entropyGenerationError(error)
+            }
+            entropyGenerationMeasurements.append(Date().timeIntervalSince(startEntropy))
+
+            for (index, passwordLength) in passwordLengths.enumerated() {
+                var entropy = entropy
+                let startComputation = Date()
+                _ = generatePassword(
+                    from: &entropy,
+                    rules: [
+                        .mustContainDecimalCharacters(atLeast: 1),
+                        .mustContainLowercaseCharacters(atLeast: 1),
+                        .mustContainUppercaseCharacters(atLeast: 1),
+                        .mustContainSymbolCharacters(atLeast: 1)
+                    ],
+                    length: passwordLength
+                )
+                computationMeasurements[index].append(Date().timeIntervalSince(startComputation))
+                totalMeasurements[index].append(computationMeasurements[index].last.unsafelyUnwrapped + entropyGenerationMeasurements.last.unsafelyUnwrapped)
+            }
+        }
+
+        return PasswordGenerationProfilingResult(
+            entropyGeneration: TimeMeasurement(entropyGenerationMeasurements),
+            computation: zip(passwordLengths, computationMeasurements).map(LabeledTimeMeasurement.init),
+            total: zip(passwordLengths, totalMeasurements).map(LabeledTimeMeasurement.init)
+        )
+    }
+
+    private func generatePassword(from entropy: inout Entropy, rules: Set<PasswordRule>, length: UInt) -> String {
         var generatedPassword = ""
         var allowedCharacters = ""
         var extraCharacters = ""

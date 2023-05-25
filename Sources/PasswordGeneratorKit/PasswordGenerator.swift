@@ -47,4 +47,12 @@ public final class PasswordGenerator {
 
         try passwordGenerator.generatePassword(salt: salt, rules: rules)
     }
+
+    public func profilePasswordGeneration(
+        iterations: Int = 5,
+        passwordLengths: [UInt] = [4, 8, 16, 32]
+    ) throws -> PasswordGenerationProfilingResult {
+
+        try passwordGenerator.profilePasswordGeneration(iterations: iterations, passwordLengths: passwordLengths)
+    }
 }
